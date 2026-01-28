@@ -34,8 +34,6 @@ Construire un parcours client fluide et automatisé :
 
 ## 🗺️ Schéma d’architecture (Mermaid)
 
-> GitHub supporte Mermaid dans les README.
-
 ```mermaid
 flowchart LR
   U[Utilisateur] -->|HTTPS| CF[CloudFront]
