@@ -71,9 +71,14 @@ flowchart LR
   WH --> PAY[Lambda: ProcessPayment]
   PAY --> DDB
 
-🔍 Description des scripts Python 
-Classify : appelle Amazon Bedrock pour classifier l’intention de la demande (JSON strict : intent, confidence, rationale) puis renvoie le résultat à Step Functions.
-Verify : valide les champs (formats/cohérence), lance Textract pour extraire les infos des PJ et compare avec la saisie ; renvoie VERIFIED/NEEDS_FIXES et publie sur SNS si HITL requis.
-ValidateConsent : contrôle consent.accepted, calcule une preuve hash (SHA‑256), enregistre l’horodatage/version/IP/userAgent dans DynamoDB, puis autorise la suite du workflow.
-GenerateContract : construit le contrat (PDF via template), l’upload dans S3 (contracts/<id>.pdf) et retourne contractId + s3Uri/s3Key pour l’étape suivante.
-Payment : déclenche le paiement après signature (mode MOCK ou intégration Stripe), enregistre l’état PENDING/PAID/FAILED dans DynamoDB et (si Stripe) traite aussi le webhook pour finaliser le statut.
+## 🔍 Description des scripts Python
+
+- **Classify** : utilise **Amazon Bedrock** pour analyser le texte libre et déterminer l’intention de la demande (`intent`, `confidence`, `rationale`), puis renvoie un résultat structuré à Step Functions.
+
+- **Verify** : contrôle la validité et la cohérence des données saisies, exécute **Amazon Textract** pour extraire les informations des pièces jointes, compare les valeurs OCR avec la saisie, renvoie `VERIFIED` ou `NEEDS_FIXES`, et publie un message **SNS** en cas de besoin d’intervention humaine (HITL).
+
+- **ValidateConsent** : vérifie `consent.accepted`, génère une **preuve hash (SHA‑256)**, stocke horodatage, version du texte, IP et user-agent dans **DynamoDB**, puis confirme la poursuite du workflow.
+
+- **GenerateContract** : génère le contrat client au format **PDF** à partir d’un template, l’enregistre dans **Amazon S3** (`contracts/<id>.pdf`) et renvoie `contractId`, `s3Uri` et `s3Key` pour l’étape suivante.
+
+- **Payment** : déclenche le **paiement après la signature** du contrat (mode **MOCK** ou **Stripe**), crée et met à jour un enregistrement dans **DynamoDB** (`PENDING`, `PAID`, `FAILED`) et, en mode Stripe, gère également le **webhook** pour finaliser le statut du paiement.
