@@ -1,3 +1,4 @@
+
 # ECOIA – UC3 Energy & Utilities (Hackathon)
 
 > **Traitement intelligent des demandes clients 100% digital** (énergie : gaz/électricité) – de la demande web jusqu’à la **signature** (DocuSign) et au **paiement après signature** (option).
@@ -34,6 +35,8 @@ Construire un parcours client fluide et automatisé :
 
 ## 🗺️ Schéma d’architecture (Mermaid)
 
+> GitHub supporte Mermaid dans les README.
+
 ```mermaid
 flowchart LR
   U[Utilisateur] -->|HTTPS| CF[CloudFront]
@@ -65,5 +68,5 @@ flowchart LR
   WH --> S3DOC
 
   %% option paiement
-  WH --> PAY[Lambda: Payment (option)]
+  WH --> PAY[Lambda: ProcessPayment (option)]
   PAY --> DDB
