@@ -70,5 +70,3 @@ flowchart LR
   %% option paiement
   WH --> PAY[Lambda: ProcessPayment]
   PAY --> DDB
-
-- **Payment** : déclenche le **paiement après la signature** du contrat (mode **MOCK** ou **Stripe**), crée et met à jour un enregistrement dans **DynamoDB** (`PENDING`, `PAID`, `FAILED`) et, en mode Stripe, gère également le **webhook** pour finaliser le statut du paiement.
